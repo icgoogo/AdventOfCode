@@ -25,7 +25,7 @@ func main() {
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		if isEmptyLine(line) {
+		if line == "" {
 			foodCalories = append(foodCalories, elfCalorySum)
 			elfCalorySum = 0
 		} else {
@@ -40,18 +40,48 @@ func main() {
 	if elfCalorySum != 0 {
 		foodCalories = append(foodCalories, elfCalorySum)
 	}
+	caloryLength := len(foodCalories)
 
-	max := 0
-	for i := 0; i < len(foodCalories); i++ {
+	fmt.Println()
+	fmt.Println(getMaxCalories(foodCalories, caloryLength))
+	sortCalories(foodCalories, caloryLength)
+	fmt.Println("top 3 : ")
+	var sum = 0
+	for i := caloryLength - 1; i >= caloryLength-3; i-- {
+		sum += foodCalories[i]
 		fmt.Println(foodCalories[i])
+	}
+	fmt.Println(sum)
+
+}
+
+func getMaxCalories(foodCalories []int, length int) int {
+	max := 0
+	for i := 0; i < length; i++ {
 		if max < foodCalories[i] {
 			max = foodCalories[i]
 		}
 	}
-	fmt.Println()
-	fmt.Print(max)
+	return max
 }
 
-func isEmptyLine(line string) bool {
-	return line == ""
+func sortCalories(calories []int, length int) {
+	swap := 0
+	for i := 0; i < length; i++ {
+		swapped := false
+
+		for j := 0; j < length-i-1; j++ {
+			if calories[j] > calories[j+1] {
+				swap = calories[j]
+				calories[j] = calories[j+1]
+				calories[j+1] = swap
+				swapped = true
+			}
+		}
+
+		if !swapped {
+			break
+		}
+
+	}
 }
